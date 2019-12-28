@@ -4,7 +4,6 @@ from scipy.ndimage import gaussian_filter
 import matplotlib.pyplot as plt
 from skimage.io import imread
 from skimage.color import rgb2gray
-import cv2
 
 
 def show_image(img_corn, img_edge):
@@ -16,7 +15,7 @@ def show_image(img_corn, img_edge):
     plt.show()
 
 
-def create_x_y_kernels():
+def create_x_y_kernels(multiplier=1.0):
     sobel_kernel_x = np.array([[-1, 0, 1],
                                [-2, 0, 2],
                                [-1, 0, 1]])
@@ -24,7 +23,8 @@ def create_x_y_kernels():
     sobel_kernel_y = np.array([[1,   2,   1],
                                [0,   0,   0],
                                [-1, -2,  -1]])
-
+    sobel_kernel_x = sobel_kernel_x * multiplier
+    sobel_kernel_y = sobel_kernel_y * multiplier
     return sobel_kernel_x, sobel_kernel_y
 
 
@@ -36,13 +36,11 @@ if __name__ == '__main__':
     img = imread('school1.jpeg')
     gray_image = rgb2gray(img)
 
-    kernel_x, kernel_y = create_x_y_kernels()
-    kernel_x, kernel_y = kernel_x * 1.5, kernel_y * 1.5
+    kernel_x, kernel_y = create_x_y_kernels(multiplier=1.5)
 
     I_x = convolve_with_kernel(gray_image, kernel_x)
     I_y = convolve_with_kernel(gray_image, kernel_y)
-    plt.imshow(I_x[:, :], cmap='gray')
-    plt.imshow(I_y[:, :], cmap='gray')
+
     I_xx = gaussian_filter(I_x ** 2, sigma=1)
     I_xy = gaussian_filter(I_x * I_y, sigma=1)
     I_yy = gaussian_filter(I_y ** 2, sigma=1)
