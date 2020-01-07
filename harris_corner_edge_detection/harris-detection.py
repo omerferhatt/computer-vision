@@ -33,7 +33,7 @@ def convolve_with_kernel(image, kernel, mode='same'):
 
 
 if __name__ == '__main__':
-    img = imread('school1.jpeg')
+    img = imread('school.jpeg')
     gray_image = rgb2gray(img)
 
     kernel_x, kernel_y = create_x_y_kernels(multiplier=1.5)
